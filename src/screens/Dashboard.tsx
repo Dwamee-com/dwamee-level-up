@@ -4,7 +4,7 @@ import { currentEmployee, allEmployees } from '@/data/mockData';
 import { getLevelTitle, getRequiredXP, getShieldEmoji, getShieldColor } from '@/data/models';
 
 interface DashboardProps {
-  onNavigate: (tab: string) => void;
+  onNavigate: (tab: any) => void;
 }
 
 export default function Dashboard({ onNavigate }: DashboardProps) {
