@@ -122,7 +122,7 @@ export default function Profile() {
           </div>
           <div className="flex justify-between items-center">
             <span className="text-xs text-muted-foreground">Current Streak</span>
-            <span className="text-xs font-bold text-orange-400">🔥 {emp.streak} days</span>
+            <span className="text-xs font-bold text-destructive">🔥 {emp.streak} days</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-xs text-muted-foreground">Points Balance</span>
