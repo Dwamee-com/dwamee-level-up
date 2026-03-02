@@ -75,9 +75,9 @@ export default function Ranking() {
                   {emp.name.charAt(0)}
                 </div>
                 <p className="text-xs font-semibold mt-2 text-center truncate max-w-[80px]">{emp.name.split(' ')[0]}</p>
-                <p className="text-[10px] text-muted-foreground">Lv {emp.level}</p>
+            <p className="text-[10px] text-muted-foreground">Lv {emp.level}</p>
                 <div className={`mt-1 ${isFirst ? 'h-20' : idx === 1 ? 'h-14' : 'h-10'} w-16 rounded-t-lg bg-primary/10 border border-primary/20 flex items-center justify-center`}>
-                  <span className="text-xs font-bold text-primary">{emp.xp}</span>
+                  <span className="text-xs font-bold text-primary">{emp.xp} XP</span>
                 </div>
               </motion.div>
             );

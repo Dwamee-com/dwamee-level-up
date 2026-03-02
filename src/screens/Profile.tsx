@@ -108,7 +108,7 @@ export default function Profile() {
         <div className="space-y-2">
           <div className="flex justify-between items-center">
             <span className="text-xs text-muted-foreground">On-time Rate</span>
-            <span className="text-xs font-bold text-green-400">
+            <span className="text-xs font-bold text-primary">
               {Math.round((emp.stats.onTimeDays / emp.stats.totalDays) * 100)}%
             </span>
           </div>

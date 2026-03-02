@@ -81,7 +81,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
           className="glass-card p-3 text-center"
         >
           <div className="flex justify-center mb-1">
-            <Flame className="w-5 h-5 text-orange-400" />
+            <Flame className="w-5 h-5 text-destructive" />
           </div>
           <p className="text-xl font-bold font-display">{emp.streak}</p>
           <p className="text-[10px] text-muted-foreground">Day Streak</p>
