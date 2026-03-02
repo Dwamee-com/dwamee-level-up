@@ -39,7 +39,7 @@ export default function Rewards() {
             >
               {isRedeemed && (
                 <div className="absolute inset-0 bg-primary/10 flex items-center justify-center z-10">
-                  <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
                     <Check className="w-6 h-6 text-primary" />
                   </div>
                 </div>

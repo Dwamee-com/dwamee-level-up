@@ -229,7 +229,7 @@ export default function GameMap() {
                 <div className="flex items-center justify-between glass-card p-3">
                   <span className="text-sm text-muted-foreground">Status</span>
                   <span className={`font-bold text-sm ${
-                    selectedNode.level <= currentEmployee.level ? 'text-green-400' : 'text-muted-foreground'
+                    selectedNode.level <= currentEmployee.level ? 'text-primary' : 'text-muted-foreground'
                   }`}>
                     {selectedNode.level <= currentEmployee.level ? '✅ Completed' : selectedNode.level === currentEmployee.level + 1 ? '🔓 Next Level' : '🔒 Locked'}
                   </span>
