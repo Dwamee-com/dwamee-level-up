@@ -59,8 +59,8 @@ export default function Profile() {
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Attendance Stats</h3>
         <div className="grid grid-cols-2 gap-3">
           {[
-            { icon: Calendar, label: 'On-time Days', value: emp.stats.onTimeDays, color: 'text-green-400' },
-            { icon: Clock, label: 'Late Days', value: emp.stats.lateDays, color: 'text-orange-400' },
+            { icon: Calendar, label: 'On-time Days', value: emp.stats.onTimeDays, color: 'text-primary' },
+            { icon: Clock, label: 'Late Days', value: emp.stats.lateDays, color: 'text-destructive' },
             { icon: Award, label: 'Perfect Weeks', value: emp.stats.perfectWeeks, color: 'text-accent' },
             { icon: TrendingUp, label: 'Total Days', value: emp.stats.totalDays, color: 'text-primary' },
           ].map((stat, i) => (
