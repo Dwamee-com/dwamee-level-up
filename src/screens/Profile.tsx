@@ -117,7 +117,7 @@ export default function Profile() {
               initial={{ width: 0 }}
               animate={{ width: `${(emp.stats.onTimeDays / emp.stats.totalDays) * 100}%` }}
               transition={{ duration: 1, delay: 0.5 }}
-              className="h-full rounded-full bg-green-400"
+              className="h-full rounded-full bg-primary"
             />
           </div>
           <div className="flex justify-between items-center">
