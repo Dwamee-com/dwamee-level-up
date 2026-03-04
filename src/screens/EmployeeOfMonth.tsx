@@ -1,22 +1,20 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download, Clock, Calendar, Award } from 'lucide-react';
-import { monthlyWinners } from '@/data/mockData';
+import { Download, Clock, Calendar, Award, Share2, ExternalLink, CheckCircle } from 'lucide-react';
+import { monthlyWinners, currentEmployee } from '@/data/mockData';
 import { getLevelTitle, getShieldEmoji } from '@/data/models';
 import jsPDF from 'jspdf';
 
 function generateCertificate(winner: typeof monthlyWinners[0]) {
   const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
   const w = doc.internal.pageSize.getWidth();
-  const h = doc.internal.pageSize.getHeight();
 
-  // Border
   doc.setDrawColor(18, 110, 183);
   doc.setLineWidth(3);
-  doc.rect(10, 10, w - 20, h - 20);
+  doc.rect(10, 10, w - 20, doc.internal.pageSize.getHeight() - 20);
   doc.setLineWidth(1);
-  doc.rect(14, 14, w - 28, h - 28);
+  doc.rect(14, 14, w - 28, doc.internal.pageSize.getHeight() - 28);
 
-  // Header
   doc.setFontSize(14);
   doc.setTextColor(100, 100, 100);
   doc.text('DWAMEE GAME HR', w / 2, 30, { align: 'center' });
@@ -33,7 +31,6 @@ function generateCertificate(winner: typeof monthlyWinners[0]) {
   doc.setTextColor(30, 30, 30);
   doc.text(winner.employee.name, w / 2, 95, { align: 'center' });
 
-  // Line
   doc.setDrawColor(212, 175, 55);
   doc.setLineWidth(1);
   doc.line(w / 2 - 60, 100, w / 2 + 60, 100);
@@ -44,7 +41,6 @@ function generateCertificate(winner: typeof monthlyWinners[0]) {
   doc.text(`Level ${winner.employee.level} · ${getLevelTitle(winner.employee.level)}`, w / 2, 125, { align: 'center' });
   doc.text(`Prize: $${winner.prize}`, w / 2, 135, { align: 'center' });
 
-  // Signature
   doc.setFontSize(12);
   doc.setTextColor(100, 100, 100);
   doc.line(w / 2 - 40, 165, w / 2 + 40, 165);
@@ -56,11 +52,25 @@ function generateCertificate(winner: typeof monthlyWinners[0]) {
 export default function EmployeeOfMonth() {
   const current = monthlyWinners[0];
   const past = monthlyWinners.slice(1);
+  const [sharedOnMeta, setSharedOnMeta] = useState(false);
+  const [rewardClaimed, setRewardClaimed] = useState(false);
 
-  // Countdown to next month
+  const isCurrentUserWinner = current.employee.id === currentEmployee.id;
+
   const now = new Date();
   const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
   const daysLeft = Math.ceil((nextMonth.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+
+  const handleShareOnMeta = () => {
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank', 'width=600,height=400');
+    setSharedOnMeta(true);
+  };
+
+  const handleClaimReward = () => {
+    if (sharedOnMeta) {
+      setRewardClaimed(true);
+    }
+  };
 
   return (
     <div className="px-4 pt-12 pb-6 space-y-5">
@@ -99,10 +109,45 @@ export default function EmployeeOfMonth() {
           <span className="text-sm">{getShieldEmoji(current.employee.shieldType)} {current.employee.shieldType} Shield</span>
         </div>
 
+        {/* Share & Claim Section */}
+        <div className="mt-4 space-y-2">
+          {!sharedOnMeta ? (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={handleShareOnMeta}
+              className="w-full py-3 rounded-xl bg-[#1877F2] text-white font-semibold text-sm flex items-center justify-center gap-2"
+            >
+              <Share2 className="w-4 h-4" /> Share Achievement on Meta
+            </motion.button>
+          ) : !rewardClaimed ? (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={handleClaimReward}
+              className="w-full py-3 rounded-xl bg-accent text-accent-foreground font-semibold text-sm flex items-center justify-center gap-2"
+            >
+              <Award className="w-4 h-4" /> Claim Your Reward!
+            </motion.button>
+          ) : (
+            <div className="w-full py-3 rounded-xl bg-green-400/20 text-green-400 font-semibold text-sm flex items-center justify-center gap-2">
+              <CheckCircle className="w-4 h-4" /> Reward Claimed!
+            </div>
+          )}
+
+          {sharedOnMeta && !rewardClaimed && (
+            <p className="text-[10px] text-green-400 flex items-center justify-center gap-1">
+              <CheckCircle className="w-3 h-3" /> Shared on Meta — You can now claim!
+            </p>
+          )}
+
+          {!sharedOnMeta && (
+            <p className="text-[10px] text-muted-foreground">Share on Meta first to unlock the reward</p>
+          )}
+        </div>
+
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => generateCertificate(current)}
-          className="mt-4 w-full py-3 rounded-xl bg-accent text-accent-foreground font-semibold text-sm flex items-center justify-center gap-2"
+          className="mt-3 w-full py-3 rounded-xl bg-primary/20 text-primary font-semibold text-sm flex items-center justify-center gap-2 border border-primary/30"
         >
           <Download className="w-4 h-4" />
           Download Certificate

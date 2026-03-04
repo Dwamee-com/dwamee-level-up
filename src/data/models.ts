@@ -37,6 +37,7 @@ export interface Reward {
   description: string;
   pointsCost: number;
   category: string;
+  redeemedBy: string[];
 }
 
 export interface RankingEntry {
