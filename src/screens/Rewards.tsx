@@ -1,14 +1,27 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ShoppingBag, Lock, Check, Coins } from 'lucide-react';
-import { rewards } from '@/data/mockData';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShoppingBag, Lock, Check, Coins, Users, Share2, ExternalLink, X } from 'lucide-react';
+import { rewards, allEmployees } from '@/data/mockData';
 import { currentEmployee } from '@/data/mockData';
 
 export default function Rewards() {
   const [redeemed, setRedeemed] = useState<Set<string>>(new Set());
+  const [sharedOnMeta, setSharedOnMeta] = useState<Set<string>>(new Set());
+  const [selectedReward, setSelectedReward] = useState<string | null>(null);
+  const [showRedeemers, setShowRedeemers] = useState<string | null>(null);
   const balance = currentEmployee.pointsBalance;
 
+  const handleShare = (rewardId: string) => {
+    // Simulate sharing to Meta
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href + '?reward=' + rewardId), '_blank', 'width=600,height=400');
+    setSharedOnMeta(prev => new Set(prev).add(rewardId));
+  };
+
   const handleRedeem = (id: string) => {
+    if (!sharedOnMeta.has(id)) {
+      setSelectedReward(id);
+      return;
+    }
     setRedeemed(prev => new Set(prev).add(id));
   };
 
@@ -26,6 +39,8 @@ export default function Rewards() {
         {rewards.map((reward, i) => {
           const canAfford = balance >= reward.pointsCost;
           const isRedeemed = redeemed.has(reward.id);
+          const isShared = sharedOnMeta.has(reward.id);
+          const redeemerNames = reward.redeemedBy.map(id => allEmployees.find(e => e.id === id)?.name).filter(Boolean);
 
           return (
             <motion.div
@@ -46,37 +61,125 @@ export default function Rewards() {
               )}
               <span className="text-3xl mb-2">{reward.icon}</span>
               <h3 className="text-sm font-semibold mb-1">{reward.name}</h3>
-              <p className="text-[10px] text-muted-foreground mb-3">{reward.description}</p>
+              <p className="text-[10px] text-muted-foreground mb-2">{reward.description}</p>
+
+              {/* Redeemed by */}
+              {redeemerNames.length > 0 && (
+                <button
+                  onClick={() => setShowRedeemers(showRedeemers === reward.id ? null : reward.id)}
+                  className="flex items-center gap-1 text-[9px] text-muted-foreground mb-2 hover:text-foreground transition-colors"
+                >
+                  <Users className="w-2.5 h-2.5" />
+                  {redeemerNames.length} redeemed
+                </button>
+              )}
+
+              <AnimatePresence>
+                {showRedeemers === reward.id && redeemerNames.length > 0 && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="w-full overflow-hidden mb-2"
+                  >
+                    <div className="bg-secondary/50 rounded-lg p-2 space-y-1">
+                      {redeemerNames.map((name, ni) => (
+                        <div key={ni} className="flex items-center gap-1.5 text-[10px]">
+                          <div className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center text-[7px] font-bold">
+                            {name!.charAt(0)}
+                          </div>
+                          <span>{name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               <div className="flex items-center gap-1 mb-3">
                 <Coins className="w-3 h-3 text-accent" />
                 <span className="text-xs font-bold text-accent">{reward.pointsCost}</span>
               </div>
-              {!isRedeemed && (
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  disabled={!canAfford}
-                  onClick={() => handleRedeem(reward.id)}
-                  className={`w-full py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 ${
-                    canAfford
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted text-muted-foreground cursor-not-allowed'
-                  }`}
-                >
-                  {canAfford ? (
-                    <>
-                      <ShoppingBag className="w-3 h-3" /> Redeem
-                    </>
-                  ) : (
-                    <>
-                      <Lock className="w-3 h-3" /> Locked
-                    </>
+
+              {!isRedeemed && canAfford && (
+                <div className="w-full space-y-1.5">
+                  {!isShared && (
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleShare(reward.id)}
+                      className="w-full py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 bg-[#1877F2]/20 text-[#1877F2] border border-[#1877F2]/30"
+                    >
+                      <Share2 className="w-3 h-3" /> Share on Meta
+                    </motion.button>
                   )}
-                </motion.button>
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    disabled={!isShared}
+                    onClick={() => handleRedeem(reward.id)}
+                    className={`w-full py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 ${
+                      isShared
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted text-muted-foreground cursor-not-allowed'
+                    }`}
+                  >
+                    {isShared ? (
+                      <><ShoppingBag className="w-3 h-3" /> Redeem</>
+                    ) : (
+                      <><Lock className="w-3 h-3" /> Share First</>
+                    )}
+                  </motion.button>
+                </div>
+              )}
+
+              {!isRedeemed && !canAfford && (
+                <div className="w-full py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 bg-muted text-muted-foreground cursor-not-allowed">
+                  <Lock className="w-3 h-3" /> Not Enough Points
+                </div>
               )}
             </motion.div>
           );
         })}
       </div>
+
+      {/* Share Prompt Dialog */}
+      <AnimatePresence>
+        {selectedReward && !sharedOnMeta.has(selectedReward) && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-6"
+            onClick={() => setSelectedReward(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={e => e.stopPropagation()}
+              className="glass-card p-6 max-w-sm w-full text-center space-y-4"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-[#1877F2]/20 flex items-center justify-center mx-auto">
+                <Share2 className="w-7 h-7 text-[#1877F2]" />
+              </div>
+              <h3 className="text-lg font-bold font-display">Share to Unlock</h3>
+              <p className="text-sm text-muted-foreground">You must share this achievement on Meta (Facebook) before you can redeem this reward.</p>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  handleShare(selectedReward);
+                  setSelectedReward(null);
+                }}
+                className="w-full py-3 rounded-xl bg-[#1877F2] text-white font-semibold text-sm flex items-center justify-center gap-2"
+              >
+                <ExternalLink className="w-4 h-4" /> Share on Facebook
+              </motion.button>
+              <button onClick={() => setSelectedReward(null)} className="text-xs text-muted-foreground">
+                Cancel
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

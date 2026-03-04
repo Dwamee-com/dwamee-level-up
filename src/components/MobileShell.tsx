@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Map, Trophy, Gift, User, Award } from 'lucide-react';
+import { Home, Map, Trophy, Gift, User, Award, DollarSign, ClipboardList } from 'lucide-react';
 import Dashboard from '@/screens/Dashboard';
 import GameMap from '@/screens/GameMap';
 import Ranking from '@/screens/Ranking';
 import EmployeeOfMonth from '@/screens/EmployeeOfMonth';
 import Rewards from '@/screens/Rewards';
 import Profile from '@/screens/Profile';
+import AnnualSalaries from '@/screens/AnnualSalaries';
+import Tasks from '@/screens/Tasks';
 
 const tabs = [
   { id: 'dashboard', icon: Home, label: 'Home' },
@@ -14,6 +16,8 @@ const tabs = [
   { id: 'ranking', icon: Trophy, label: 'Rank' },
   { id: 'eom', icon: Award, label: 'Star' },
   { id: 'rewards', icon: Gift, label: 'Rewards' },
+  { id: 'salaries', icon: DollarSign, label: 'Salary' },
+  { id: 'tasks', icon: ClipboardList, label: 'Tasks' },
   { id: 'profile', icon: User, label: 'Profile' },
 ] as const;
 
@@ -29,6 +33,8 @@ export default function MobileShell() {
       case 'ranking': return <Ranking />;
       case 'eom': return <EmployeeOfMonth />;
       case 'rewards': return <Rewards />;
+      case 'salaries': return <AnnualSalaries />;
+      case 'tasks': return <Tasks />;
       case 'profile': return <Profile />;
     }
   };
@@ -54,7 +60,7 @@ export default function MobileShell() {
 
         {/* Bottom Navigation */}
         <nav className="flex-shrink-0 border-t border-border/50 bg-card/90 backdrop-blur-xl">
-          <div className="flex items-center justify-around px-2 py-1 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
+          <div className="flex items-center justify-around px-1 py-1 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
               const Icon = tab.icon;
@@ -62,7 +68,7 @@ export default function MobileShell() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as TabId)}
-                  className="flex flex-col items-center justify-center gap-0.5 py-1.5 px-3 rounded-xl transition-all relative"
+                  className="flex flex-col items-center justify-center gap-0.5 py-1 px-1.5 rounded-xl transition-all relative"
                 >
                   {isActive && (
                     <motion.div
@@ -72,12 +78,12 @@ export default function MobileShell() {
                     />
                   )}
                   <Icon
-                    className={`w-5 h-5 transition-colors relative z-10 ${
+                    className={`w-4 h-4 transition-colors relative z-10 ${
                       isActive ? 'text-primary' : 'text-muted-foreground'
                     }`}
                   />
                   <span
-                    className={`text-[10px] font-medium transition-colors relative z-10 ${
+                    className={`text-[8px] font-medium transition-colors relative z-10 ${
                       isActive ? 'text-primary' : 'text-muted-foreground'
                     }`}
                   >
