@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Map, Trophy, Gift, User, Award, DollarSign, ClipboardList } from 'lucide-react';
+import { Home, Map, Trophy, Gift, User, Award, DollarSign, ClipboardList, Bell } from 'lucide-react';
 import Dashboard from '@/screens/Dashboard';
 import GameMap from '@/screens/GameMap';
 import Ranking from '@/screens/Ranking';
@@ -9,6 +9,7 @@ import Rewards from '@/screens/Rewards';
 import Profile from '@/screens/Profile';
 import AnnualSalaries from '@/screens/AnnualSalaries';
 import Tasks from '@/screens/Tasks';
+import Reminders from '@/screens/Reminders';
 
 const tabs = [
   { id: 'dashboard', icon: Home, label: 'Home' },
@@ -18,6 +19,7 @@ const tabs = [
   { id: 'rewards', icon: Gift, label: 'Rewards' },
   { id: 'salaries', icon: DollarSign, label: 'Salary' },
   { id: 'tasks', icon: ClipboardList, label: 'Tasks' },
+  { id: 'reminders', icon: Bell, label: 'Remind' },
   { id: 'profile', icon: User, label: 'Profile' },
 ] as const;
 
