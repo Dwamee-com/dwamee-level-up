@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DollarSign, TrendingUp, TrendingDown, CheckCircle, Clock, ChevronDown, ChevronUp, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { annualSalaries } from '@/data/mockData';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Line, ComposedChart, Area } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Area, ComposedChart } from 'recharts';
 
 export default function AnnualSalaries() {
   const [expandedMonth, setExpandedMonth] = useState<number | null>(null);
@@ -31,8 +31,8 @@ export default function AnnualSalaries() {
           <p className="text-[9px] text-muted-foreground">Total Earned</p>
         </motion.div>
         <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="glass-card p-3 text-center">
-          <TrendingUp className="w-4 h-4 text-green-400 mx-auto mb-1" />
-          <p className="text-sm font-bold font-display text-green-400">+${totalBonus.toLocaleString()}</p>
+          <TrendingUp className="w-4 h-4 text-success mx-auto mb-1" />
+          <p className="text-sm font-bold font-display text-success">+${totalBonus.toLocaleString()}</p>
           <p className="text-[9px] text-muted-foreground">Total Bonus</p>
         </motion.div>
         <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="glass-card p-3 text-center">
@@ -48,20 +48,20 @@ export default function AnnualSalaries() {
         <div className="h-44">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(215 20% 18%)" />
-              <XAxis dataKey="name" tick={{ fontSize: 10, fill: 'hsl(215 15% 55%)' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 10, fill: 'hsl(215 15% 55%)' }} axisLine={false} tickLine={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(210 15% 89%)" />
+              <XAxis dataKey="name" tick={{ fontSize: 10, fill: 'hsl(215 12% 50%)' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 10, fill: 'hsl(215 12% 50%)' }} axisLine={false} tickLine={false} />
               <Tooltip
                 contentStyle={{
-                  background: 'hsl(215 28% 10%)',
-                  border: '1px solid hsl(215 20% 18%)',
+                  background: 'hsl(0 0% 100%)',
+                  border: '1px solid hsl(210 15% 89%)',
                   borderRadius: '12px',
                   fontSize: '12px',
-                  color: 'hsl(210 40% 96%)',
+                  color: 'hsl(215 25% 15%)',
                 }}
               />
-              <Area type="monotone" dataKey="net" fill="hsl(207 78% 40% / 0.15)" stroke="hsl(207 78% 40%)" strokeWidth={2} />
-              <Bar dataKey="bonus" fill="hsl(142 70% 45%)" radius={[4, 4, 0, 0]} barSize={8} />
+              <Area type="monotone" dataKey="net" fill="hsl(207 75% 40% / 0.1)" stroke="hsl(207 75% 40%)" strokeWidth={2} />
+              <Bar dataKey="bonus" fill="hsl(160 64% 43%)" radius={[4, 4, 0, 0]} barSize={8} />
               <Bar dataKey="deduction" fill="hsl(0 72% 50%)" radius={[4, 4, 0, 0]} barSize={8} />
             </ComposedChart>
           </ResponsiveContainer>
@@ -84,18 +84,18 @@ export default function AnnualSalaries() {
                 onClick={() => setExpandedMonth(isExpanded ? null : i)}
                 className="w-full glass-card p-3 flex items-center gap-3 hover:bg-secondary/50 transition-colors"
               >
-                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
                   {salary.month.slice(0, 3)}
                 </div>
                 <div className="flex-1 text-left">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold">{salary.month}</p>
                     {salary.status === 'confirmed' ? (
-                      <span className="flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded-full bg-green-400/20 text-green-400">
+                      <span className="flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-success">
                         <CheckCircle className="w-2.5 h-2.5" /> Confirmed
                       </span>
                     ) : (
-                      <span className="flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded-full bg-accent/20 text-accent">
+                      <span className="flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-600">
                         <Clock className="w-2.5 h-2.5" /> Pending
                       </span>
                     )}
@@ -103,7 +103,7 @@ export default function AnnualSalaries() {
                   <div className="flex items-center gap-3 mt-0.5">
                     <span className="text-[10px] text-muted-foreground">Base: ${salary.basicSalary.toLocaleString()}</span>
                     {salary.bonus > 0 && (
-                      <span className="text-[10px] text-green-400 flex items-center gap-0.5">
+                      <span className="text-[10px] text-success flex items-center gap-0.5">
                         <ArrowUpRight className="w-2.5 h-2.5" />+${salary.bonus}
                       </span>
                     )}
@@ -139,10 +139,10 @@ export default function AnnualSalaries() {
                           className="glass-card p-2.5 flex items-start gap-2"
                         >
                           <div className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                            detail.type === 'bonus' ? 'bg-green-400/20' : 'bg-destructive/20'
+                            detail.type === 'bonus' ? 'bg-emerald-100' : 'bg-red-100'
                           }`}>
                             {detail.type === 'bonus' ? (
-                              <ArrowUpRight className="w-3 h-3 text-green-400" />
+                              <ArrowUpRight className="w-3 h-3 text-success" />
                             ) : (
                               <ArrowDownRight className="w-3 h-3 text-destructive" />
                             )}
@@ -150,7 +150,7 @@ export default function AnnualSalaries() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between">
                               <p className="text-xs font-semibold">{detail.event}</p>
-                              <p className={`text-xs font-bold ${detail.type === 'bonus' ? 'text-green-400' : 'text-destructive'}`}>
+                              <p className={`text-xs font-bold ${detail.type === 'bonus' ? 'text-success' : 'text-destructive'}`}>
                                 {detail.type === 'bonus' ? '+' : '-'}${detail.amount}
                               </p>
                             </div>

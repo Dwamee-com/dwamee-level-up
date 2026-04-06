@@ -14,6 +14,7 @@ import Rewards from "@/screens/Rewards";
 import AnnualSalaries from "@/screens/AnnualSalaries";
 import Tasks from "@/screens/Tasks";
 import Reminders from "@/screens/Reminders";
+import Requests from "@/screens/Requests";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="rewards" element={<Rewards />} />
             <Route path="salaries" element={<AnnualSalaries />} />
             <Route path="tasks" element={<Tasks />} />
+            <Route path="requests" element={<Requests />} />
             <Route path="reminders" element={<Reminders />} />
             <Route path="employees" element={<AdminEmployees />} />
           </Route>

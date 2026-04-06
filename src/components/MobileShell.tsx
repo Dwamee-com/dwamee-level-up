@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Map, Trophy, Gift, User, Award, DollarSign, ClipboardList, Bell } from 'lucide-react';
+import { Home, Map, Trophy, Gift, User, Award, DollarSign, ClipboardList, Bell, FileText } from 'lucide-react';
 import Dashboard from '@/screens/Dashboard';
 import GameMap from '@/screens/GameMap';
 import Ranking from '@/screens/Ranking';
@@ -10,6 +10,7 @@ import Profile from '@/screens/Profile';
 import AnnualSalaries from '@/screens/AnnualSalaries';
 import Tasks from '@/screens/Tasks';
 import Reminders from '@/screens/Reminders';
+import Requests from '@/screens/Requests';
 
 const tabs = [
   { id: 'dashboard', icon: Home, label: 'Home' },
@@ -19,6 +20,7 @@ const tabs = [
   { id: 'rewards', icon: Gift, label: 'Rewards' },
   { id: 'salaries', icon: DollarSign, label: 'Salary' },
   { id: 'tasks', icon: ClipboardList, label: 'Tasks' },
+  { id: 'requests', icon: FileText, label: 'Requests' },
   { id: 'reminders', icon: Bell, label: 'Remind' },
   { id: 'profile', icon: User, label: 'Profile' },
 ] as const;
@@ -37,14 +39,15 @@ export default function MobileShell() {
       case 'rewards': return <Rewards />;
       case 'salaries': return <AnnualSalaries />;
       case 'tasks': return <Tasks />;
+      case 'requests': return <Requests />;
       case 'reminders': return <Reminders />;
       case 'profile': return <Profile />;
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-background">
-      <div className="relative w-full max-w-[430px] h-screen max-h-[932px] bg-background overflow-hidden flex flex-col shadow-2xl">
+    <div className="flex justify-center items-center min-h-screen bg-muted">
+      <div className="relative w-full max-w-[430px] h-screen max-h-[932px] bg-background overflow-hidden flex flex-col shadow-2xl border border-border/50 rounded-none sm:rounded-3xl">
         {/* Screen Content */}
         <div className="flex-1 overflow-hidden">
           <AnimatePresence mode="wait">
@@ -62,7 +65,7 @@ export default function MobileShell() {
         </div>
 
         {/* Bottom Navigation */}
-        <nav className="flex-shrink-0 border-t border-border/50 bg-card/90 backdrop-blur-xl">
+        <nav className="flex-shrink-0 border-t border-border bg-card">
           <div className="flex items-center justify-around px-1 py-1 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;

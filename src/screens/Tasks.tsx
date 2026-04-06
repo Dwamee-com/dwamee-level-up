@@ -4,18 +4,18 @@ import { Play, Pause, Square, CheckCircle, Clock, AlertTriangle, Paperclip, Mess
 import { dailyTasks, DailyTask } from '@/data/mockData';
 
 const statusConfig = {
-  not_started: { label: 'Not Started', color: 'text-muted-foreground', bg: 'bg-muted/50', icon: Clock },
-  in_progress: { label: 'In Progress', color: 'text-primary', bg: 'bg-primary/20', icon: Play },
-  paused: { label: 'Paused', color: 'text-accent', bg: 'bg-accent/20', icon: Pause },
-  completed: { label: 'Completed', color: 'text-green-400', bg: 'bg-green-400/20', icon: CheckCircle },
-  cancelled: { label: 'Cancelled', color: 'text-destructive', bg: 'bg-destructive/20', icon: XCircle },
+  not_started: { label: 'Not Started', color: 'text-muted-foreground', bg: 'bg-muted', icon: Clock },
+  in_progress: { label: 'In Progress', color: 'text-primary', bg: 'bg-primary/10', icon: Play },
+  paused: { label: 'Paused', color: 'text-amber-600', bg: 'bg-amber-100', icon: Pause },
+  completed: { label: 'Completed', color: 'text-success', bg: 'bg-emerald-100', icon: CheckCircle },
+  cancelled: { label: 'Cancelled', color: 'text-destructive', bg: 'bg-red-100', icon: XCircle },
 };
 
 const priorityConfig = {
-  low: { label: 'Low', color: 'text-muted-foreground', bg: 'bg-muted/30' },
-  medium: { label: 'Medium', color: 'text-primary', bg: 'bg-primary/20' },
-  high: { label: 'High', color: 'text-accent', bg: 'bg-accent/20' },
-  urgent: { label: 'Urgent', color: 'text-destructive', bg: 'bg-destructive/20' },
+  low: { label: 'Low', color: 'text-muted-foreground', bg: 'bg-muted' },
+  medium: { label: 'Medium', color: 'text-primary', bg: 'bg-primary/10' },
+  high: { label: 'High', color: 'text-amber-600', bg: 'bg-amber-100' },
+  urgent: { label: 'Urgent', color: 'text-destructive', bg: 'bg-red-100' },
 };
 
 const fileIcon = (type: string) => {
@@ -65,7 +65,7 @@ export default function Tasks() {
           <h1 className="text-2xl font-bold font-display">Tasks</h1>
           <p className="text-xs text-muted-foreground">March 4, 2026 · {completedCount}/{tasks.length} completed</p>
         </div>
-        <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
           <span className="text-sm font-bold text-primary">{Math.round(progressPct)}%</span>
         </div>
       </div>
@@ -168,25 +168,25 @@ export default function Tasks() {
                         <div className="flex gap-1.5 flex-wrap">
                           {task.status !== 'in_progress' && task.status !== 'completed' && (
                             <motion.button whileTap={{ scale: 0.95 }} onClick={() => updateTaskStatus(task.id, 'in_progress')}
-                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary/20 text-primary text-[10px] font-semibold">
+                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-[10px] font-semibold">
                               <Play className="w-3 h-3" /> Start
                             </motion.button>
                           )}
                           {task.status === 'in_progress' && (
                             <motion.button whileTap={{ scale: 0.95 }} onClick={() => updateTaskStatus(task.id, 'paused')}
-                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-accent/20 text-accent text-[10px] font-semibold">
+                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-100 text-amber-600 text-[10px] font-semibold">
                               <Pause className="w-3 h-3" /> Pause
                             </motion.button>
                           )}
                           {task.status !== 'completed' && task.status !== 'cancelled' && (
                             <motion.button whileTap={{ scale: 0.95 }} onClick={() => updateTaskStatus(task.id, 'completed')}
-                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-green-400/20 text-green-400 text-[10px] font-semibold">
+                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-100 text-success text-[10px] font-semibold">
                               <CheckCircle className="w-3 h-3" /> Complete
                             </motion.button>
                           )}
                           {task.status !== 'completed' && task.status !== 'cancelled' && (
                             <motion.button whileTap={{ scale: 0.95 }} onClick={() => updateTaskStatus(task.id, 'cancelled')}
-                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-destructive/20 text-destructive text-[10px] font-semibold">
+                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-100 text-destructive text-[10px] font-semibold">
                               <Square className="w-3 h-3" /> Cancel
                             </motion.button>
                           )}
@@ -199,8 +199,8 @@ export default function Tasks() {
                           <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-2">Attachments</p>
                           <div className="space-y-1">
                             {task.attachments.map(att => (
-                              <div key={att.id} className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-secondary/50">
-                                <div className="w-6 h-6 rounded bg-primary/20 flex items-center justify-center text-primary">
+                              <div key={att.id} className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-secondary">
+                                <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center text-primary">
                                   {fileIcon(att.type)}
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -221,12 +221,12 @@ export default function Tasks() {
                         <div className="space-y-2 max-h-40 overflow-y-auto no-scrollbar">
                           {task.comments.map(comment => (
                             <div key={comment.id} className={`flex gap-2 ${comment.userId === 'e1' ? 'flex-row-reverse' : ''}`}>
-                              <div className="w-6 h-6 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-[9px] font-bold flex-shrink-0">
+                              <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-[9px] font-bold flex-shrink-0">
                                 {comment.userName.charAt(0)}
                               </div>
                               <div className={`flex-1 max-w-[80%] ${comment.userId === 'e1' ? 'text-right' : ''}`}>
                                 <div className={`inline-block px-3 py-2 rounded-xl text-[11px] ${
-                                  comment.userId === 'e1' ? 'bg-primary/20 text-foreground' : 'bg-secondary text-foreground'
+                                  comment.userId === 'e1' ? 'bg-primary/10' : 'bg-secondary'
                                 }`}>
                                   <p className="font-semibold text-[9px] mb-0.5">{comment.userName}</p>
                                   <p>{comment.text}</p>
@@ -247,7 +247,7 @@ export default function Tasks() {
                             onChange={e => setNewComment(prev => ({ ...prev, [task.id]: e.target.value }))}
                             onKeyDown={e => e.key === 'Enter' && addComment(task.id)}
                             placeholder="Write a comment..."
-                            className="flex-1 bg-secondary/50 border border-border/50 rounded-xl px-3 py-2 text-[11px] placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                            className="flex-1 bg-secondary border border-border rounded-xl px-3 py-2 text-[11px] placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                           />
                           <motion.button
                             whileTap={{ scale: 0.9 }}
