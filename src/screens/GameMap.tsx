@@ -80,8 +80,8 @@ export default function GameMap() {
                       top: '50%',
                       height: '90px',
                       background: style === 'locked'
-                        ? 'hsl(215 20% 18%)'
-                        : 'linear-gradient(180deg, hsl(207 78% 40%), hsl(207 78% 30%))',
+                        ? 'hsl(210 15% 89%)'
+                        : 'linear-gradient(180deg, hsl(207 75% 40%), hsl(207 75% 55%))',
                     }}
                   />
                 )}
@@ -116,10 +116,10 @@ export default function GameMap() {
                       flex items-center justify-center rounded-full border-2 transition-all
                       ${node.isMilestone ? 'w-14 h-14' : 'w-10 h-10'}
                       ${style === 'current'
-                        ? 'border-primary bg-primary/20 glow-primary'
+                        ? 'border-primary bg-primary/10 glow-primary'
                         : style === 'completed'
-                          ? 'border-primary/50 bg-primary/10'
-                          : 'border-border bg-muted/30'
+                          ? 'border-primary/40 bg-primary/5'
+                          : 'border-border bg-muted/50'
                       }
                     `}
                   >
@@ -135,7 +135,7 @@ export default function GameMap() {
                         <Zap className="w-4 h-4 text-primary" />
                       </motion.div>
                     ) : (
-                      <Star className="w-3.5 h-3.5 text-primary/60" />
+                      <Star className="w-3.5 h-3.5 text-primary/50" />
                     )}
                   </motion.div>
 
@@ -145,7 +145,7 @@ export default function GameMap() {
                       {mates.slice(0, 2).map((initial, j) => (
                         <div
                           key={j}
-                          className="w-5 h-5 rounded-full bg-accent text-accent-foreground text-[8px] font-bold flex items-center justify-center border border-background"
+                          className="w-5 h-5 rounded-full bg-accent text-accent-foreground text-[8px] font-bold flex items-center justify-center border-2 border-background"
                         >
                           {initial}
                         </div>
@@ -193,7 +193,7 @@ export default function GameMap() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-end justify-center"
+            className="absolute inset-0 bg-foreground/10 backdrop-blur-sm z-50 flex items-end justify-center"
             onClick={() => setSelectedLevel(null)}
           >
             <motion.div
@@ -229,7 +229,7 @@ export default function GameMap() {
                 <div className="flex items-center justify-between glass-card p-3">
                   <span className="text-sm text-muted-foreground">Status</span>
                   <span className={`font-bold text-sm ${
-                    selectedNode.level <= currentEmployee.level ? 'text-primary' : 'text-muted-foreground'
+                    selectedNode.level <= currentEmployee.level ? 'text-success' : 'text-muted-foreground'
                   }`}>
                     {selectedNode.level <= currentEmployee.level ? '✅ Completed' : selectedNode.level === currentEmployee.level + 1 ? '🔓 Next Level' : '🔒 Locked'}
                   </span>

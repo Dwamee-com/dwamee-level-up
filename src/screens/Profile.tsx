@@ -16,9 +16,9 @@ export default function Profile() {
         animate={{ scale: 1, opacity: 1 }}
         className="glass-card p-6 text-center relative overflow-hidden"
       >
-        <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-primary/10 to-transparent" />
+        <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-primary/5 to-transparent" />
         <div className="relative z-10">
-          <div className="w-20 h-20 rounded-full bg-primary/20 border-3 border-primary mx-auto flex items-center justify-center text-3xl font-bold mb-3">
+          <div className="w-20 h-20 rounded-full bg-primary/10 border-3 border-primary mx-auto flex items-center justify-center text-3xl font-bold mb-3">
             {emp.name.charAt(0)}
           </div>
           <h2 className="text-xl font-bold font-display">{emp.name}</h2>
@@ -41,7 +41,7 @@ export default function Profile() {
               animate={{ width: `${xpProgress * 100}%` }}
               transition={{ duration: 1, ease: 'easeOut' }}
               className="h-full rounded-full"
-              style={{ background: 'linear-gradient(90deg, hsl(207 78% 40%), hsl(43 90% 55%))' }}
+              style={{ background: 'linear-gradient(90deg, hsl(207 75% 40%), hsl(43 90% 55%))' }}
             />
           </div>
         </div>

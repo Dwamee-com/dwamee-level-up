@@ -22,7 +22,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
           <p className="text-muted-foreground text-sm">Welcome back</p>
           <h1 className="text-2xl font-bold font-display">{emp.name}</h1>
         </div>
-        <div className="w-12 h-12 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center text-lg font-bold">
+        <div className="w-12 h-12 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center text-lg font-bold text-primary">
           {emp.name.charAt(0)}
         </div>
       </div>
@@ -35,7 +35,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
       >
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-10 translate-x-10" />
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
             <span className="text-3xl font-bold text-gradient-primary font-display">{emp.level}</span>
           </div>
           <div className="flex-1">
@@ -63,7 +63,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
               transition={{ duration: 1.2, ease: 'easeOut', delay: 0.3 }}
               className="h-full rounded-full relative"
               style={{
-                background: 'linear-gradient(90deg, hsl(207 78% 40%), hsl(207 78% 55%), hsl(43 90% 55%))',
+                background: 'linear-gradient(90deg, hsl(207 75% 40%), hsl(207 75% 55%), hsl(43 90% 55%))',
               }}
             >
               <div className="absolute inset-0 shimmer rounded-full" />
@@ -120,7 +120,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
         {[
           { icon: MapPin, label: 'View Game Map', desc: 'Explore levels 1-100', tab: 'map', color: 'text-primary' },
           { icon: Trophy, label: 'Rankings', desc: 'See where you stand', tab: 'ranking', color: 'text-accent' },
-          { icon: Gift, label: 'Rewards Store', desc: `${emp.pointsBalance} points available`, tab: 'rewards', color: 'text-green-400' },
+          { icon: Gift, label: 'Rewards Store', desc: `${emp.pointsBalance} points available`, tab: 'rewards', color: 'text-success' },
           { icon: Shield, label: 'Profile & Badges', desc: `${emp.badges.length} badges earned`, tab: 'profile', color: 'text-platinum' },
         ].map((item, i) => (
           <motion.button

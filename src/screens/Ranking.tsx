@@ -71,12 +71,12 @@ export default function Ranking() {
                 className={`flex flex-col items-center ${isFirst ? 'order-2' : idx === 1 ? 'order-1' : 'order-3'}`}
               >
                 <span className="text-2xl mb-1">{medals[idx]}</span>
-                <div className={`${isFirst ? 'w-16 h-16' : 'w-12 h-12'} rounded-full bg-primary/20 border-2 ${isFirst ? 'border-accent glow-gold' : 'border-primary/50'} flex items-center justify-center text-lg font-bold`}>
+                <div className={`${isFirst ? 'w-16 h-16' : 'w-12 h-12'} rounded-full bg-primary/10 border-2 ${isFirst ? 'border-accent glow-gold' : 'border-primary/30'} flex items-center justify-center text-lg font-bold`}>
                   {emp.name.charAt(0)}
                 </div>
                 <p className="text-xs font-semibold mt-2 text-center truncate max-w-[80px]">{emp.name.split(' ')[0]}</p>
-            <p className="text-[10px] text-muted-foreground">Lv {emp.level}</p>
-                <div className={`mt-1 ${isFirst ? 'h-20' : idx === 1 ? 'h-14' : 'h-10'} w-16 rounded-t-lg bg-primary/10 border border-primary/20 flex items-center justify-center`}>
+                <p className="text-[10px] text-muted-foreground">Lv {emp.level}</p>
+                <div className={`mt-1 ${isFirst ? 'h-20' : idx === 1 ? 'h-14' : 'h-10'} w-16 rounded-t-lg bg-primary/5 border border-primary/15 flex items-center justify-center`}>
                   <span className="text-xs font-bold text-primary">{emp.xp} XP</span>
                 </div>
               </motion.div>
@@ -95,12 +95,12 @@ export default function Ranking() {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.1 + i * 0.05 }}
-              className={`glass-card p-3 flex items-center gap-3 ${isMe ? 'border-primary/50 glow-primary' : ''}`}
+              className={`glass-card p-3 flex items-center gap-3 ${isMe ? 'border-primary/40 glow-primary' : ''}`}
             >
               <span className="w-6 text-center font-bold text-sm text-muted-foreground">
                 {i < 3 ? medals[i] : `${i + 1}`}
               </span>
-              <div className="w-9 h-9 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-sm font-bold">
+              <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-sm font-bold">
                 {emp.name.charAt(0)}
               </div>
               <div className="flex-1 min-w-0">

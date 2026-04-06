@@ -118,7 +118,6 @@ export default function Reminders() {
       return da - db;
     });
 
-  // Group by date
   const grouped = filtered.reduce<Record<string, Reminder[]>>((acc, r) => {
     if (!acc[r.date]) acc[r.date] = [];
     acc[r.date].push(r);
@@ -174,13 +173,13 @@ export default function Reminders() {
                   value={isRecording ? recordingText : newText}
                   onChange={e => setNewText(e.target.value)}
                   placeholder="What to remember..."
-                  className="flex-1 bg-secondary/50 border border-border/50 rounded-xl px-3 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="flex-1 bg-secondary border border-border rounded-xl px-3 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 />
                 <motion.button
                   whileTap={{ scale: 0.9 }}
                   onClick={isRecording ? stopVoiceRecording : startVoiceRecording}
                   className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-                    isRecording ? 'bg-destructive animate-pulse' : 'bg-primary/20'
+                    isRecording ? 'bg-destructive animate-pulse' : 'bg-primary/10'
                   }`}
                 >
                   {isRecording ? (
@@ -195,7 +194,7 @@ export default function Reminders() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-destructive/10 border border-destructive/20"
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 border border-destructive/20"
                 >
                   <div className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
                   <p className="text-xs text-destructive">Listening... speak now</p>
@@ -208,13 +207,13 @@ export default function Reminders() {
                   type="date"
                   value={newDate}
                   onChange={e => setNewDate(e.target.value)}
-                  className="flex-1 bg-secondary/50 border border-border/50 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary [color-scheme:dark]"
+                  className="flex-1 bg-secondary border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                 />
                 <input
                   type="time"
                   value={newTime}
                   onChange={e => setNewTime(e.target.value)}
-                  className="w-28 bg-secondary/50 border border-border/50 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary [color-scheme:dark]"
+                  className="w-28 bg-secondary border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
 
@@ -302,7 +301,7 @@ export default function Reminders() {
                         <Clock className="w-2.5 h-2.5" /> {reminder.time}
                       </span>
                       {overdue && (
-                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-destructive/20 text-destructive font-semibold">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-red-100 text-destructive font-semibold">
                           Overdue
                         </span>
                       )}

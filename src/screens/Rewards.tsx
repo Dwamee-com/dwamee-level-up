@@ -12,7 +12,6 @@ export default function Rewards() {
   const balance = currentEmployee.pointsBalance;
 
   const handleShare = (rewardId: string) => {
-    // Simulate sharing to Meta
     window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href + '?reward=' + rewardId), '_blank', 'width=600,height=400');
     setSharedOnMeta(prev => new Set(prev).add(rewardId));
   };
@@ -29,7 +28,7 @@ export default function Rewards() {
     <div className="px-4 pt-12 pb-6 space-y-5">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold font-display">Rewards</h1>
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/20 border border-accent/30">
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/30">
           <Coins className="w-4 h-4 text-accent" />
           <span className="font-bold text-sm text-accent">{balance}</span>
         </div>
@@ -53,8 +52,8 @@ export default function Rewards() {
               }`}
             >
               {isRedeemed && (
-                <div className="absolute inset-0 bg-primary/10 flex items-center justify-center z-10">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                <div className="absolute inset-0 bg-primary/5 flex items-center justify-center z-10">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                     <Check className="w-6 h-6 text-primary" />
                   </div>
                 </div>
@@ -63,7 +62,6 @@ export default function Rewards() {
               <h3 className="text-sm font-semibold mb-1">{reward.name}</h3>
               <p className="text-[10px] text-muted-foreground mb-2">{reward.description}</p>
 
-              {/* Redeemed by */}
               {redeemerNames.length > 0 && (
                 <button
                   onClick={() => setShowRedeemers(showRedeemers === reward.id ? null : reward.id)}
@@ -82,10 +80,10 @@ export default function Rewards() {
                     exit={{ height: 0, opacity: 0 }}
                     className="w-full overflow-hidden mb-2"
                   >
-                    <div className="bg-secondary/50 rounded-lg p-2 space-y-1">
+                    <div className="bg-secondary rounded-lg p-2 space-y-1">
                       {redeemerNames.map((name, ni) => (
                         <div key={ni} className="flex items-center gap-1.5 text-[10px]">
-                          <div className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center text-[7px] font-bold">
+                          <div className="w-4 h-4 rounded-full bg-primary/10 flex items-center justify-center text-[7px] font-bold">
                             {name!.charAt(0)}
                           </div>
                           <span>{name}</span>
@@ -107,7 +105,7 @@ export default function Rewards() {
                     <motion.button
                       whileTap={{ scale: 0.95 }}
                       onClick={() => handleShare(reward.id)}
-                      className="w-full py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 bg-[#1877F2]/20 text-[#1877F2] border border-[#1877F2]/30"
+                      className="w-full py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 bg-blue-50 text-[#1877F2] border border-[#1877F2]/20"
                     >
                       <Share2 className="w-3 h-3" /> Share on Meta
                     </motion.button>
@@ -148,7 +146,7 @@ export default function Rewards() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-6"
+            className="fixed inset-0 z-50 bg-foreground/20 backdrop-blur-sm flex items-center justify-center p-6"
             onClick={() => setSelectedReward(null)}
           >
             <motion.div
@@ -158,7 +156,7 @@ export default function Rewards() {
               onClick={e => e.stopPropagation()}
               className="glass-card p-6 max-w-sm w-full text-center space-y-4"
             >
-              <div className="w-14 h-14 rounded-2xl bg-[#1877F2]/20 flex items-center justify-center mx-auto">
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto">
                 <Share2 className="w-7 h-7 text-[#1877F2]" />
               </div>
               <h3 className="text-lg font-bold font-display">Share to Unlock</h3>
