@@ -1,4 +1,4 @@
-import { Home, Map, Trophy, Award, Gift, Users, DollarSign, ClipboardList, Bell, BarChart3 } from 'lucide-react';
+import { Home, Map, Trophy, Award, Gift, Users, DollarSign, ClipboardList, Bell, BarChart3, FileText } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useLocation } from 'react-router-dom';
 import {
@@ -21,6 +21,7 @@ const menuItems = [
   { title: 'Rewards', url: '/admin/rewards', icon: Gift },
   { title: 'Salaries', url: '/admin/salaries', icon: DollarSign },
   { title: 'Tasks', url: '/admin/tasks', icon: ClipboardList },
+  { title: 'Requests', url: '/admin/requests', icon: FileText },
   { title: 'Reminders', url: '/admin/reminders', icon: Bell },
   { title: 'Employees', url: '/admin/employees', icon: Users },
 ];
