@@ -11,6 +11,7 @@ import AnnualSalaries from '@/screens/AnnualSalaries';
 import Tasks from '@/screens/Tasks';
 import Reminders from '@/screens/Reminders';
 import Requests from '@/screens/Requests';
+import Visits from '@/screens/Visits';
 
 const tabs = [
   { id: 'dashboard', icon: Home, label: 'Home' },
