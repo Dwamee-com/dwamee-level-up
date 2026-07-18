@@ -107,6 +107,8 @@ const isToday = (iso: string) => {
 };
 const daysAgo = (iso: string) => (Date.now() - new Date(iso).getTime()) / 86400000;
 
+const AVG_SPEED_KMH = 40; // assumption for ETA
+
 export default function Visits() {
   const [visits, setVisits] = useState<Visit[]>(() => load());
   const [showNew, setShowNew] = useState(false);
@@ -115,6 +117,7 @@ export default function Visits() {
   const [autoMode, setAutoMode] = useState<'start' | 'end' | null>(null);
   const [selected, setSelected] = useState<Visit | null>(null);
   const [, setTick] = useState(0);
+  const [liveDistKm, setLiveDistKm] = useState<number | null>(null);
 
   useEffect(() => { save(visits); }, [visits]);
   useEffect(() => {
@@ -125,22 +128,22 @@ export default function Visits() {
   const active = visits.find((v) => v.status === 'in_progress');
   const todayVisits = visits.filter((v) => isToday(v.startTime)).sort((a, b) => b.startTime.localeCompare(a.startTime));
 
-  // Auto-arrival check
+  // Live tracking to destination (distance + ETA + auto-arrival)
   useEffect(() => {
-    if (!active?.destination || !active.autoMode) return;
+    if (!active?.destination) { setLiveDistKm(null); return; }
+    let cancelled = false;
     const check = async () => {
       const cur = await getLocation();
       const d = haversine(cur, active.destination!);
-      if (d < 0.15) { // within 150m
-        if (active.autoMode === 'start') {
-          // already started, ignore
-        } else if (active.autoMode === 'end') {
-          endVisit(active.id);
-        }
+      if (cancelled) return;
+      setLiveDistKm(d);
+      if (d < 0.15 && active.autoMode === 'end') {
+        endVisit(active.id);
       }
     };
+    check();
     const t = setInterval(check, 15000);
-    return () => clearInterval(t);
+    return () => { cancelled = true; clearInterval(t); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active?.id]);
 
@@ -162,6 +165,9 @@ export default function Visits() {
     setVisits([v, ...visits]);
     setShowNew(false);
     setTitle(''); setDestUrl(''); setAutoMode(null);
+    if (destUrl) {
+      try { window.open(destUrl, '_blank', 'noopener,noreferrer'); } catch { /* empty */ }
+    }
   };
 
   const endVisit = async (id: string) => {
@@ -232,48 +238,79 @@ export default function Visits() {
       {active && (
         <motion.div
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-          className="glass-card p-4 border-primary/40 bg-primary/5"
+          className="relative overflow-hidden rounded-2xl p-4 text-primary-foreground shadow-lg"
+          style={{ background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.85) 55%, hsl(var(--success) / 0.9) 130%)' }}
         >
-          <div className="flex items-center justify-between mb-2">
+          {/* decorative blobs */}
+          <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
+          <div className="absolute -bottom-12 -left-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
+
+          <div className="relative flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />
               </span>
-              <span className="text-xs font-semibold text-success">IN PROGRESS</span>
+              <span className="text-[10px] font-bold tracking-wider">LIVE VISIT</span>
             </div>
-            <span className="text-xs text-muted-foreground">{fmtDur(durationMs(active))}</span>
+            <span className="text-[11px] font-mono bg-white/15 px-2 py-0.5 rounded-full backdrop-blur-sm">
+              {fmtDur(durationMs(active))}
+            </span>
           </div>
-          <div className="font-semibold mb-3">{active.title}</div>
-          <div className="grid grid-cols-3 gap-2 text-center mb-3">
-            <div className="rounded-lg bg-card p-2">
-              <Clock className="w-3.5 h-3.5 mx-auto text-primary mb-0.5" />
-              <div className="text-xs font-semibold">{fmtTime(active.startTime)}</div>
-              <div className="text-[9px] text-muted-foreground">Started</div>
+
+          <div className="relative mb-3">
+            <div className="text-lg font-bold leading-tight">{active.title}</div>
+            <div className="text-[11px] opacity-80 flex items-center gap-1 mt-0.5">
+              <Clock className="w-3 h-3" /> Started {fmtTime(active.startTime)}
             </div>
-            <div className="rounded-lg bg-card p-2">
-              <RouteIcon className="w-3.5 h-3.5 mx-auto text-primary mb-0.5" />
-              <div className="text-xs font-semibold">
-                {active.startLoc ? '—' : '—'}
+          </div>
+
+          {active.destination && (
+            <div className="relative rounded-xl bg-white/15 backdrop-blur-sm p-3 mb-3 border border-white/20">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold">
+                  <Target className="w-3.5 h-3.5" /> Destination
+                </div>
+                {active.autoMode === 'end' && (
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-white/25 font-semibold">AUTO-END</span>
+                )}
               </div>
-              <div className="text-[9px] text-muted-foreground">Tracking</div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <div className="text-[9px] opacity-75 uppercase tracking-wide">Distance left</div>
+                  <div className="text-lg font-bold">
+                    {liveDistKm != null ? `${liveDistKm.toFixed(2)} km` : '…'}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[9px] opacity-75 uppercase tracking-wide">ETA</div>
+                  <div className="text-lg font-bold">
+                    {liveDistKm != null
+                      ? liveDistKm < 0.15
+                        ? 'Arrived'
+                        : `${Math.max(1, Math.round((liveDistKm / AVG_SPEED_KMH) * 60))} min`
+                      : '…'}
+                  </div>
+                </div>
+              </div>
+              {active.destinationUrl && (
+                <a href={active.destinationUrl} target="_blank" rel="noreferrer"
+                  className="mt-2.5 flex items-center justify-center gap-1.5 text-[11px] font-semibold py-1.5 rounded-lg bg-white text-primary">
+                  <ExternalLink className="w-3 h-3" /> Open in Google Maps
+                </a>
+              )}
             </div>
-            <div className="rounded-lg bg-card p-2">
-              <Target className="w-3.5 h-3.5 mx-auto text-primary mb-0.5" />
-              <div className="text-xs font-semibold">{active.destination ? 'Set' : 'None'}</div>
-              <div className="text-[9px] text-muted-foreground">Destination</div>
-            </div>
-          </div>
-          {active.destinationUrl && (
-            <a href={active.destinationUrl} target="_blank" rel="noreferrer"
-              className="flex items-center gap-1.5 text-xs text-primary mb-2">
-              <ExternalLink className="w-3 h-3" /> Open in Google Maps
-              {active.autoMode === 'end' && <span className="ml-auto text-[10px] text-success">Auto-end on arrival</span>}
-            </a>
           )}
+
+          <div className="relative grid grid-cols-3 gap-2 mb-3">
+            <MiniPill icon={<Clock className="w-3 h-3" />} label="Start" val={fmtTime(active.startTime)} />
+            <MiniPill icon={<RouteIcon className="w-3 h-3" />} label="Tracking" val="Live" />
+            <MiniPill icon={<Gauge className="w-3 h-3" />} label="Avg" val={`${avgSpeed(active)} km/h`} />
+          </div>
+
           <button
             onClick={() => endVisit(active.id)}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-destructive text-destructive-foreground font-semibold text-sm"
+            className="relative w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white text-destructive font-bold text-sm shadow-md active:scale-[0.98] transition"
           >
             <Square className="w-4 h-4 fill-current" /> End visit
           </button>
@@ -312,24 +349,47 @@ export default function Visits() {
             No visits yet today. Tap <b>New</b> to start one.
           </div>
         ) : (
-          <div className="space-y-2">
-            {todayVisits.map((v) => (
-              <button key={v.id} onClick={() => setSelected(v)}
-                className="w-full glass-card p-3 text-left hover:border-primary/40 transition">
-                <div className="flex items-start justify-between gap-2 mb-1.5">
-                  <div className="font-semibold text-sm">{v.title}</div>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                    v.status === 'in_progress' ? 'bg-success/15 text-success' : 'bg-muted text-muted-foreground'
-                  }`}>{v.status === 'in_progress' ? 'Live' : 'Done'}</span>
-                </div>
-                <div className="grid grid-cols-4 gap-1 text-center">
-                  <MiniStat icon={<Clock className="w-3 h-3" />} val={fmtTime(v.startTime)} lbl="Start" />
-                  <MiniStat icon={<Clock className="w-3 h-3" />} val={v.endTime ? fmtTime(v.endTime) : '—'} lbl="End" />
-                  <MiniStat icon={<RouteIcon className="w-3 h-3" />} val={`${v.distanceKm} km`} lbl="Dist" />
-                  <MiniStat icon={<Gauge className="w-3 h-3" />} val={`${avgSpeed(v)}`} lbl="km/h" />
-                </div>
-              </button>
-            ))}
+          <div className="space-y-2.5">
+            {todayVisits.map((v, i) => {
+              const live = v.status === 'in_progress';
+              return (
+                <motion.button
+                  key={v.id}
+                  onClick={() => setSelected(v)}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                  className={`group relative w-full text-left rounded-2xl overflow-hidden bg-card border transition shadow-sm hover:shadow-md ${
+                    live ? 'border-success/40' : 'border-border hover:border-primary/40'
+                  }`}
+                >
+                  {/* left accent bar */}
+                  <span className={`absolute left-0 top-0 bottom-0 w-1 ${live ? 'bg-success' : 'bg-primary/60'}`} />
+                  <div className="p-3 pl-4">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="min-w-0">
+                        <div className="font-semibold text-sm truncate">{v.title}</div>
+                        <div className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                          <Clock className="w-2.5 h-2.5" />
+                          {fmtTime(v.startTime)} {v.endTime && <>→ {fmtTime(v.endTime)}</>} · {fmtDur(durationMs(v))}
+                        </div>
+                      </div>
+                      <span className={`shrink-0 text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1 ${
+                        live ? 'bg-success text-success-foreground' : 'bg-muted text-muted-foreground'
+                      }`}>
+                        {live && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+                        {live ? 'LIVE' : 'DONE'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      <ListStat icon={<RouteIcon className="w-3 h-3" />} val={`${v.distanceKm}`} unit="km" lbl="Distance" tone="primary" />
+                      <ListStat icon={<Gauge className="w-3 h-3" />} val={`${avgSpeed(v)}`} unit="km/h" lbl="Avg speed" tone="success" />
+                      <ListStat icon={<Clock className="w-3 h-3" />} val={fmtDur(durationMs(v)).replace(' ', '')} unit="" lbl="Duration" tone="muted" />
+                    </div>
+                  </div>
+                </motion.button>
+              );
+            })}
           </div>
         )}
       </div>
@@ -451,6 +511,32 @@ function MiniStat({ icon, val, lbl }: { icon: React.ReactNode; val: string; lbl:
     <div className="rounded-md bg-muted/50 py-1">
       <div className="flex items-center justify-center gap-0.5 text-[10px] font-semibold">{icon}{val}</div>
       <div className="text-[9px] text-muted-foreground">{lbl}</div>
+    </div>
+  );
+}
+
+function MiniPill({ icon, label, val }: { icon: React.ReactNode; label: string; val: string }) {
+  return (
+    <div className="rounded-lg bg-white/15 backdrop-blur-sm p-2 border border-white/15">
+      <div className="flex items-center gap-1 text-[9px] opacity-80 uppercase tracking-wide">{icon}{label}</div>
+      <div className="text-xs font-bold mt-0.5">{val}</div>
+    </div>
+  );
+}
+
+function ListStat({ icon, val, unit, lbl, tone }: { icon: React.ReactNode; val: string; unit: string; lbl: string; tone: 'primary' | 'success' | 'muted' }) {
+  const toneCls =
+    tone === 'primary' ? 'text-primary bg-primary/10'
+    : tone === 'success' ? 'text-success bg-success/10'
+    : 'text-foreground bg-muted';
+  return (
+    <div className="rounded-lg bg-muted/40 p-1.5">
+      <div className={`inline-flex items-center gap-1 text-[9px] font-semibold px-1.5 py-0.5 rounded ${toneCls}`}>
+        {icon}{lbl}
+      </div>
+      <div className="mt-1 text-sm font-bold leading-none">
+        {val}<span className="text-[10px] text-muted-foreground font-medium ml-0.5">{unit}</span>
+      </div>
     </div>
   );
 }
