@@ -349,24 +349,47 @@ export default function Visits() {
             No visits yet today. Tap <b>New</b> to start one.
           </div>
         ) : (
-          <div className="space-y-2">
-            {todayVisits.map((v) => (
-              <button key={v.id} onClick={() => setSelected(v)}
-                className="w-full glass-card p-3 text-left hover:border-primary/40 transition">
-                <div className="flex items-start justify-between gap-2 mb-1.5">
-                  <div className="font-semibold text-sm">{v.title}</div>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                    v.status === 'in_progress' ? 'bg-success/15 text-success' : 'bg-muted text-muted-foreground'
-                  }`}>{v.status === 'in_progress' ? 'Live' : 'Done'}</span>
-                </div>
-                <div className="grid grid-cols-4 gap-1 text-center">
-                  <MiniStat icon={<Clock className="w-3 h-3" />} val={fmtTime(v.startTime)} lbl="Start" />
-                  <MiniStat icon={<Clock className="w-3 h-3" />} val={v.endTime ? fmtTime(v.endTime) : '—'} lbl="End" />
-                  <MiniStat icon={<RouteIcon className="w-3 h-3" />} val={`${v.distanceKm} km`} lbl="Dist" />
-                  <MiniStat icon={<Gauge className="w-3 h-3" />} val={`${avgSpeed(v)}`} lbl="km/h" />
-                </div>
-              </button>
-            ))}
+          <div className="space-y-2.5">
+            {todayVisits.map((v, i) => {
+              const live = v.status === 'in_progress';
+              return (
+                <motion.button
+                  key={v.id}
+                  onClick={() => setSelected(v)}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                  className={`group relative w-full text-left rounded-2xl overflow-hidden bg-card border transition shadow-sm hover:shadow-md ${
+                    live ? 'border-success/40' : 'border-border hover:border-primary/40'
+                  }`}
+                >
+                  {/* left accent bar */}
+                  <span className={`absolute left-0 top-0 bottom-0 w-1 ${live ? 'bg-success' : 'bg-primary/60'}`} />
+                  <div className="p-3 pl-4">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="min-w-0">
+                        <div className="font-semibold text-sm truncate">{v.title}</div>
+                        <div className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                          <Clock className="w-2.5 h-2.5" />
+                          {fmtTime(v.startTime)} {v.endTime && <>→ {fmtTime(v.endTime)}</>} · {fmtDur(durationMs(v))}
+                        </div>
+                      </div>
+                      <span className={`shrink-0 text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1 ${
+                        live ? 'bg-success text-success-foreground' : 'bg-muted text-muted-foreground'
+                      }`}>
+                        {live && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+                        {live ? 'LIVE' : 'DONE'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      <ListStat icon={<RouteIcon className="w-3 h-3" />} val={`${v.distanceKm}`} unit="km" lbl="Distance" tone="primary" />
+                      <ListStat icon={<Gauge className="w-3 h-3" />} val={`${avgSpeed(v)}`} unit="km/h" lbl="Avg speed" tone="success" />
+                      <ListStat icon={<Clock className="w-3 h-3" />} val={fmtDur(durationMs(v)).replace(' ', '')} unit="" lbl="Duration" tone="muted" />
+                    </div>
+                  </div>
+                </motion.button>
+              );
+            })}
           </div>
         )}
       </div>
