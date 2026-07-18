@@ -22,6 +22,7 @@ const tabs = [
   { id: 'salaries', icon: DollarSign, label: 'Salary' },
   { id: 'tasks', icon: ClipboardList, label: 'Tasks' },
   { id: 'requests', icon: FileText, label: 'Requests' },
+  { id: 'visits', icon: Navigation, label: 'Visits' },
   { id: 'reminders', icon: Bell, label: 'Remind' },
   { id: 'profile', icon: User, label: 'Profile' },
 ] as const;
