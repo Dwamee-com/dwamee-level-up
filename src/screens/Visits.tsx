@@ -107,6 +107,8 @@ const isToday = (iso: string) => {
 };
 const daysAgo = (iso: string) => (Date.now() - new Date(iso).getTime()) / 86400000;
 
+const AVG_SPEED_KMH = 40; // assumption for ETA
+
 export default function Visits() {
   const [visits, setVisits] = useState<Visit[]>(() => load());
   const [showNew, setShowNew] = useState(false);
@@ -115,6 +117,7 @@ export default function Visits() {
   const [autoMode, setAutoMode] = useState<'start' | 'end' | null>(null);
   const [selected, setSelected] = useState<Visit | null>(null);
   const [, setTick] = useState(0);
+  const [liveDistKm, setLiveDistKm] = useState<number | null>(null);
 
   useEffect(() => { save(visits); }, [visits]);
   useEffect(() => {
