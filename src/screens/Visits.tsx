@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MapPin, Play, Square, Navigation, Clock, Gauge, Route as RouteIcon,
-  Paperclip, StickyNote, ExternalLink, Target, CheckCircle2, X, Plus, TrendingUp,
+  Paperclip, ExternalLink, Target, X, Plus, TrendingUp,
 } from 'lucide-react';
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
