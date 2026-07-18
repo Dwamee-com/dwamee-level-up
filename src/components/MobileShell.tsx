@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Map, Trophy, Gift, User, Award, DollarSign, ClipboardList, Bell, FileText } from 'lucide-react';
+import { Home, Map, Trophy, Gift, User, Award, DollarSign, ClipboardList, Bell, FileText, Navigation } from 'lucide-react';
 import Dashboard from '@/screens/Dashboard';
 import GameMap from '@/screens/GameMap';
 import Ranking from '@/screens/Ranking';
@@ -11,6 +11,7 @@ import AnnualSalaries from '@/screens/AnnualSalaries';
 import Tasks from '@/screens/Tasks';
 import Reminders from '@/screens/Reminders';
 import Requests from '@/screens/Requests';
+import Visits from '@/screens/Visits';
 
 const tabs = [
   { id: 'dashboard', icon: Home, label: 'Home' },
@@ -21,6 +22,7 @@ const tabs = [
   { id: 'salaries', icon: DollarSign, label: 'Salary' },
   { id: 'tasks', icon: ClipboardList, label: 'Tasks' },
   { id: 'requests', icon: FileText, label: 'Requests' },
+  { id: 'visits', icon: Navigation, label: 'Visits' },
   { id: 'reminders', icon: Bell, label: 'Remind' },
   { id: 'profile', icon: User, label: 'Profile' },
 ] as const;
@@ -40,6 +42,7 @@ export default function MobileShell() {
       case 'salaries': return <AnnualSalaries />;
       case 'tasks': return <Tasks />;
       case 'requests': return <Requests />;
+      case 'visits': return <Visits />;
       case 'reminders': return <Reminders />;
       case 'profile': return <Profile />;
     }
