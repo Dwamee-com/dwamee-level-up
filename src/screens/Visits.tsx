@@ -128,22 +128,22 @@ export default function Visits() {
   const active = visits.find((v) => v.status === 'in_progress');
   const todayVisits = visits.filter((v) => isToday(v.startTime)).sort((a, b) => b.startTime.localeCompare(a.startTime));
 
-  // Auto-arrival check
+  // Live tracking to destination (distance + ETA + auto-arrival)
   useEffect(() => {
-    if (!active?.destination || !active.autoMode) return;
+    if (!active?.destination) { setLiveDistKm(null); return; }
+    let cancelled = false;
     const check = async () => {
       const cur = await getLocation();
       const d = haversine(cur, active.destination!);
-      if (d < 0.15) { // within 150m
-        if (active.autoMode === 'start') {
-          // already started, ignore
-        } else if (active.autoMode === 'end') {
-          endVisit(active.id);
-        }
+      if (cancelled) return;
+      setLiveDistKm(d);
+      if (d < 0.15 && active.autoMode === 'end') {
+        endVisit(active.id);
       }
     };
+    check();
     const t = setInterval(check, 15000);
-    return () => clearInterval(t);
+    return () => { cancelled = true; clearInterval(t); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active?.id]);
 
