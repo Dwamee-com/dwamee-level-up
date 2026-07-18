@@ -42,6 +42,7 @@ export default function MobileShell() {
       case 'salaries': return <AnnualSalaries />;
       case 'tasks': return <Tasks />;
       case 'requests': return <Requests />;
+      case 'visits': return <Visits />;
       case 'reminders': return <Reminders />;
       case 'profile': return <Profile />;
     }
