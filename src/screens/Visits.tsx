@@ -114,7 +114,7 @@ export default function Visits() {
   const [destUrl, setDestUrl] = useState('');
   const [autoMode, setAutoMode] = useState<'start' | 'end' | null>(null);
   const [selected, setSelected] = useState<Visit | null>(null);
-  const [tick, setTick] = useState(0);
+  const [, setTick] = useState(0);
 
   useEffect(() => { save(visits); }, [visits]);
   useEffect(() => {
