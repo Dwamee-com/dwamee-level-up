@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Map, Trophy, Gift, User, Award, DollarSign, ClipboardList, Bell, FileText } from 'lucide-react';
+import { Home, Map, Trophy, Gift, User, Award, DollarSign, ClipboardList, Bell, FileText, Navigation } from 'lucide-react';
 import Dashboard from '@/screens/Dashboard';
 import GameMap from '@/screens/GameMap';
 import Ranking from '@/screens/Ranking';
