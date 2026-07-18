@@ -165,6 +165,9 @@ export default function Visits() {
     setVisits([v, ...visits]);
     setShowNew(false);
     setTitle(''); setDestUrl(''); setAutoMode(null);
+    if (destUrl) {
+      try { window.open(destUrl, '_blank', 'noopener,noreferrer'); } catch { /* empty */ }
+    }
   };
 
   const endVisit = async (id: string) => {
