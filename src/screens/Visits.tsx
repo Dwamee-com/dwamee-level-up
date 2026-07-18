@@ -515,6 +515,32 @@ function MiniStat({ icon, val, lbl }: { icon: React.ReactNode; val: string; lbl:
   );
 }
 
+function MiniPill({ icon, label, val }: { icon: React.ReactNode; label: string; val: string }) {
+  return (
+    <div className="rounded-lg bg-white/15 backdrop-blur-sm p-2 border border-white/15">
+      <div className="flex items-center gap-1 text-[9px] opacity-80 uppercase tracking-wide">{icon}{label}</div>
+      <div className="text-xs font-bold mt-0.5">{val}</div>
+    </div>
+  );
+}
+
+function ListStat({ icon, val, unit, lbl, tone }: { icon: React.ReactNode; val: string; unit: string; lbl: string; tone: 'primary' | 'success' | 'muted' }) {
+  const toneCls =
+    tone === 'primary' ? 'text-primary bg-primary/10'
+    : tone === 'success' ? 'text-success bg-success/10'
+    : 'text-foreground bg-muted';
+  return (
+    <div className="rounded-lg bg-muted/40 p-1.5">
+      <div className={`inline-flex items-center gap-1 text-[9px] font-semibold px-1.5 py-0.5 rounded ${toneCls}`}>
+        {icon}{lbl}
+      </div>
+      <div className="mt-1 text-sm font-bold leading-none">
+        {val}<span className="text-[10px] text-muted-foreground font-medium ml-0.5">{unit}</span>
+      </div>
+    </div>
+  );
+}
+
 function DetailRow({ label, val }: { label: string; val: string }) {
   return (
     <div className="rounded-lg bg-muted/50 p-2">
